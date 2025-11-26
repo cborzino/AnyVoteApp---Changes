@@ -88,7 +88,7 @@ export default function AnyVoteInfo() {
   const openSteps = () => navigation.navigate('AnyVoteSteps' as never)
 
   // se você tiver uma tela de mapa no stack, ajuste o nome aqui:
-  const goToMap = () => navigation.navigate('MapaVotoMovel' as never)
+  const goToMap = () => navigation.navigate('MapScreen' as never)
 
   return (
     <View style={{ flex: 1, backgroundColor: '#F6F7FA' }}>
@@ -309,7 +309,7 @@ export default function AnyVoteInfo() {
                   Seu token aparecerá aqui próximo à eleição.
                 </Text>
               </View>
-              <Hint text="O token é pessoal e intransferível. Não compartilhe!" />
+              {/* <Hint text="O token é pessoal e intransferível. Não compartilhe!" /> */}
             </View>
           )}
         </Card>
