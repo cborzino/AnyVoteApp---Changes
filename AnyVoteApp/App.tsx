@@ -1,20 +1,25 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+// App.tsx
+import React, { useState } from 'react'
+import { NavigationContainer } from '@react-navigation/native'
+import { StatusBar } from 'expo-status-bar'
+import { ElectionProvider } from './src/context/ElectionContext'
+
+import BottomTabs from './src/components/BottomTabs'
+import Login from './src/screens/Login'
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
+  const [logged, setLogged] = useState(false)
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+  return (
+    <ElectionProvider>
+      <NavigationContainer>
+        <StatusBar style="dark" />
+        {logged ? (
+          <BottomTabs />
+        ) : (
+          <Login onContinue={() => setLogged(true)} />
+        )}
+      </NavigationContainer>
+    </ElectionProvider>
+  )
+}
