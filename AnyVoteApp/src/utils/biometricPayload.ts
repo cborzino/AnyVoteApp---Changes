@@ -11,8 +11,27 @@ export interface BiometricTokenPayload {
   municipioId: string // pode ser ID do município ou código que define os cargos
   templateBytes: number
   template: string // ASCII aleatórios simulando o template biométrico
+  ecdsaSignatureHex: string
 }
 
+export function generateMockEcdsaSignatureHex(
+  lengthBytes: number = 64,
+  rng: () => number = Math.random,
+): string {
+  const hexAlphabet = '0123456789abcdef'
+  const n = hexAlphabet.length
+  let hex = ''
+
+  // 64 bytes = 128 caracteres hex
+  const hexLen = lengthBytes * 2
+
+  for (let i = 0; i < hexLen; i++) {
+    const idx = Math.floor(rng() * n)
+    hex += hexAlphabet[idx]
+  }
+
+  return hex
+}
 /**
  * Gera uma string ASCII aleatória com o comprimento desejado.
  * Isso é só para fins de DEMO, **não** é aleatoriedade criptográfica real.
@@ -63,6 +82,9 @@ export function buildBiometricTokenPayload(params: {
 
   const template = generateRandomAsciiTemplate(templateLength, rng)
 
+  // NOVO: mock de assinatura ECDSA 64 bytes em hex
+  const ecdsaSignatureHex = generateMockEcdsaSignatureHex(64, rng)
+
   return {
     tokenId,
     zona,
@@ -70,6 +92,7 @@ export function buildBiometricTokenPayload(params: {
     municipioId,
     templateBytes: template.length,
     template,
+    ecdsaSignatureHex,
   }
 }
 

@@ -181,7 +181,7 @@ export default function MapScreen() {
       {/* Mapa */}
       <MapView
         ref={mapRef}
-        provider={PROVIDER_GOOGLE}
+        // provider={PROVIDER_GOOGLE}
         style={{ flex: 1 }}
         initialRegion={initialRegion}
       >

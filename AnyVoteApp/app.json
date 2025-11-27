@@ -13,11 +13,17 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.anonymous.AnyVoteApp"
     },
     "android": {
       "edgeToEdgeEnabled": true,
-      "package": "com.anonymous.AnyVoteApp"
+      "package": "com.anonymous.AnyVoteApp",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyDUJkoG3_mKogLRkxqIrFLQHGpWyhNgBbA"
+        }
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"

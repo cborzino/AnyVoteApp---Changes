@@ -222,31 +222,7 @@ export default function BiometricTokenQR() {
         </Pressable>
       </View>
 
-      {/* BOTÃO EXTRA DE DEBUG PARA AUMENTAR QRs MAIS RÁPIDO */}
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'center',
-          marginTop: 8,
-        }}
-      >
-        <Pressable
-          onPress={() => {
-            setExtraParts(v => v + 3)
-            console.log('=== [BiometricTokenQR] Debug: extraParts +3 acionado ===')
-          }}
-          style={{
-            paddingHorizontal: 12,
-            paddingVertical: 6,
-            backgroundColor: '#FFB33A',
-            borderRadius: 6,
-          }}
-        >
-          <Text style={{ fontSize: 12, fontWeight: '700', color: '#111' }}>
-            Debug: aumentar QRs (+3)
-          </Text>
-        </Pressable>
-      </View>
+
 
       {/* QR ATUAL – BEM GRANDE */}
       <View

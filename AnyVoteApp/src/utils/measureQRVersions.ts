@@ -124,11 +124,11 @@ async function measureForModeAndExtraParts(mode: Mode, extraParts: number) {
 async function main() {
   // mínimo de QRs
   await measureForModeAndExtraParts('real', 0)
-  await measureForModeAndExtraParts('demo', 0)
+//   await measureForModeAndExtraParts('demo', 0)
 
   // por exemplo: 3 QRs a mais do mínimo (menos denso)
-  await measureForModeAndExtraParts('real', 3)
-  await measureForModeAndExtraParts('demo', 3)
+  await measureForModeAndExtraParts('real', 10)
+//   await measureForModeAndExtraParts('demo', 3)
 
   // se depois você quiser testar “até dar 9 QRs”, dá pra botar um loop
   // variando extraParts até que parts.length === 9.
