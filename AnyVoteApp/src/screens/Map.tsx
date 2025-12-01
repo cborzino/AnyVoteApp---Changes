@@ -1,7 +1,16 @@
 // src/screens/Map.tsx
 import React, { useMemo, useRef, useState } from 'react'
-import { View, Text, Pressable, TextInput, FlatList, Linking, Platform } from 'react-native'
-import MapView, { Marker, PROVIDER_GOOGLE, Region } from 'react-native-maps'
+import {
+  View,
+  Text,
+  Pressable,
+  TextInput,
+  FlatList,
+  Linking,
+  Platform,
+  Modal,
+} from 'react-native'
+import MapView, { Marker, Region } from 'react-native-maps'
 import { Ionicons } from '@expo/vector-icons'
 
 type Place = {
@@ -61,6 +70,12 @@ export default function MapScreen() {
   const [query, setQuery] = useState('')
   const [selected, setSelected] = useState<Place | null>(PLACES[0])
 
+  // local que o usuário está prestes a transferir (pra abrir o modal)
+  const [pendingPlace, setPendingPlace] = useState<Place | null>(null)
+
+  // local “escolhido” mockado só pra feedback visual
+  const [chosenPlace, setChosenPlace] = useState<Place | null>(null)
+
   const initialRegion: Region = {
     latitude: selected?.lat ?? -23.58,
     longitude: selected?.lng ?? -46.84,
@@ -76,7 +91,7 @@ export default function MapScreen() {
         p.name.toLowerCase().includes(q) ||
         p.address.toLowerCase().includes(q) ||
         p.secao.toLowerCase().includes(q) ||
-        p.zone.toLowerCase().includes(q)
+        p.zone.toLowerCase().includes(q),
     )
   }, [query])
 
@@ -84,7 +99,7 @@ export default function MapScreen() {
     setSelected(p)
     mapRef.current?.animateToRegion(
       { latitude: p.lat, longitude: p.lng, latitudeDelta: 0.01, longitudeDelta: 0.01 },
-      500
+      500,
     )
     setQuery('') // fecha sugestões
   }
@@ -181,7 +196,6 @@ export default function MapScreen() {
       {/* Mapa */}
       <MapView
         ref={mapRef}
-        // provider={PROVIDER_GOOGLE}
         style={{ flex: 1 }}
         initialRegion={initialRegion}
       >
@@ -278,7 +292,7 @@ export default function MapScreen() {
             </Pressable>
 
             <Pressable
-              onPress={() => {/* aqui você faria a “transferência” ilustrativa */}}
+              onPress={() => setPendingPlace(selected)}
               disabled={isFull(selected)}
               style={{
                 flex: 1,
@@ -290,12 +304,106 @@ export default function MapScreen() {
               }}
             >
               <Text style={{ color: '#FFF', fontWeight: '700' }}>
-                {isFull(selected) ? 'Sem vagas' : 'Transferir local'}
+                {isFull(selected)
+                  ? 'Sem vagas'
+                  : chosenPlace && chosenPlace.id === selected.id
+                  ? 'Local escolhido'
+                  : 'Transferir local'}
               </Text>
             </Pressable>
           </View>
         </View>
       )}
+
+      {/* Modal de confirmação (simples, por cima da tela) */}
+      <Modal
+        visible={!!pendingPlace}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setPendingPlace(null)}
+      >
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: 'rgba(0,0,0,0.35)',
+            alignItems: 'center',
+            justifyContent: 'center',
+            paddingHorizontal: 20,
+          }}
+        >
+          {pendingPlace && (
+            <View
+              style={{
+                backgroundColor: '#FFF',
+                borderRadius: 16,
+                padding: 18,
+                width: '100%',
+                maxWidth: 420,
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 18,
+                  fontWeight: '700',
+                  marginBottom: 8,
+                  color: '#0E1C2E',
+                }}
+              >
+                Confirmar transferência
+              </Text>
+
+              <Text style={{ color: '#4B5563', marginBottom: 8 }}>
+                Você está prestes a transferir seu local de votação para:
+              </Text>
+
+              <Text style={{ fontWeight: '700', color: '#111827' }}>
+                {pendingPlace.name}
+              </Text>
+              <Text style={{ color: '#6B7280', marginBottom: 10 }}>
+                {pendingPlace.address}
+              </Text>
+
+              <Text style={{ color: '#4B5563', fontSize: 13, marginBottom: 14 }}>
+                Enquanto o período de escolha de local estiver aberto, você poderá alterar esse
+                local novamente quantas vezes precisar. Após o encerramento do prazo, vale o último
+                local escolhido.
+              </Text>
+
+
+
+              <View style={{ flexDirection: 'row', gap: 10, justifyContent: 'flex-end' }}>
+                <Pressable
+                  onPress={() => setPendingPlace(null)}
+                  style={{
+                    paddingVertical: 10,
+                    paddingHorizontal: 14,
+                    borderRadius: 999,
+                    borderWidth: 1,
+                    borderColor: '#D1D5DB',
+                  }}
+                >
+                  <Text style={{ color: '#374151', fontWeight: '600' }}>Cancelar</Text>
+                </Pressable>
+
+                <Pressable
+                  onPress={() => {
+                    setChosenPlace(pendingPlace)
+                    setPendingPlace(null)
+                  }}
+                  style={{
+                    paddingVertical: 10,
+                    paddingHorizontal: 16,
+                    borderRadius: 999,
+                    backgroundColor: '#2563EB',
+                  }}
+                >
+                  <Text style={{ color: '#FFF', fontWeight: '700' }}>Confirmar</Text>
+                </Pressable>
+              </View>
+            </View>
+          )}
+        </View>
+      </Modal>
     </View>
   )
 }

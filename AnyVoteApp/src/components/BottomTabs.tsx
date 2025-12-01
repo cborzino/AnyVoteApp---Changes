@@ -7,6 +7,7 @@ import { Ionicons } from '@expo/vector-icons'
 import AnyVoteStack from './AnyVoteInfoStack'
 import Info from '../screens/Info'
 import { DebugScreen } from '../screens/DebugScreen'
+import AnyVoteInfo from '../screens/AnyVoteInfo'
 
 const Tab = createBottomTabNavigator()
 
@@ -31,8 +32,7 @@ export default function BottomTabs() {
           return <Ionicons name={iconName} size={size} color={color} />
         },
       })}
-      // se quiser começar direto na aba Voto Móvel:
-      // initialRouteName="Voto Móvel"
+
     >
       <Tab.Screen name="Info" component={Info} />
       <Tab.Screen name="Voto Móvel" component={AnyVoteStack} />

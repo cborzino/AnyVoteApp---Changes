@@ -46,7 +46,7 @@ export default function Faq() {
       </ScrollView>
 
       <Pressable
-        onPress={() => nav.navigate('AnyVoteInfo')}
+        onPress={handleFinish}
         style={{
           position: 'absolute',
           bottom: 20,

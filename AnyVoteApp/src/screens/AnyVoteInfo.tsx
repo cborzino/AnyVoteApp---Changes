@@ -1,5 +1,5 @@
 // src/screens/AnyVoteInfo.tsx
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo, useRef } from 'react'
 import { View, Text, Pressable, ScrollView } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
@@ -41,7 +41,6 @@ function getEscolhaStatusFromPhase(phase: ElectionPhase) {
 /* ===== status pessoal guiado pelo userStatus ===== */
 
 type PersonalStage = 'pending' | 'review' | 'done'
-
 function getUserCadastroStatus(userStatus: UserStatus): {
   label: string
   color: string
@@ -50,11 +49,17 @@ function getUserCadastroStatus(userStatus: UserStatus): {
   switch (userStatus) {
     case 'REG_PENDING':
       return { label: 'Seu status: Em análise',  color: '#E09B00', stage: 'review' }
+
     case 'REG_CONFIRMED':
     case 'LOCATION_CHOSEN':
       return { label: 'Seu status: Concluído',   color: '#1B7F4E', stage: 'done' }
-    case 'FIRST_TIME':
+
     case 'NOT_REGISTERED':
+      return { label: 'Seu status: Não registrado', color: '#B33636', stage: 'pending' }
+
+    case 'FIRST_TIME':
+      return { label: 'Seu status: Primeiro acesso', color: '#B33636', stage: 'pending' }
+
     default:
       return { label: 'Seu status: Pendente',    color: '#B33636', stage: 'pending' }
   }
@@ -63,6 +68,22 @@ function getUserCadastroStatus(userStatus: UserStatus): {
 export default function AnyVoteInfo() {
   const navigation = useNavigation<any>()
   const { phase, userStatus } = useElection()
+
+  const canChooseLocation = phase === 'LOCATION_CHOICE'
+  const alreadyRedirectedRef = useRef(false)
+
+  useEffect(() => {
+    // dispara o tutorial só se for FIRST_TIME
+    if (userStatus === 'FIRST_TIME' && !alreadyRedirectedRef.current) {
+      alreadyRedirectedRef.current = true
+
+      // entra na tela inicial do tutorial
+      // (usa o nome que você já tem registrado no stack root)A
+      navigation.replace('AnyVoteStart' as never)
+      // ou navigation.replace('AnyVoteStart' as never) se não quiser que volte pra info com "voltar"
+    }
+  }, [userStatus, navigation])
+
 
   const cad = useMemo(() => ({
     ...getCadastroStatusFromPhase(phase),
@@ -235,20 +256,22 @@ export default function AnyVoteInfo() {
             }
           />
 
-          <Pressable
-            onPress={goToMap}
-            style={{
-              marginTop: 10,
-              backgroundColor: '#0D6EFD',
-              borderRadius: 12,
-              paddingVertical: 12,
-              alignItems: 'center',
-            }}
-          >
-            <Text style={{ color: '#FFF', fontWeight: '700' }}>
-              Escolher local de votação
-            </Text>
-          </Pressable>
+<Pressable
+  onPress={goToMap}
+  disabled={!canChooseLocation}
+  style={{
+    marginTop: 10,
+    backgroundColor: canChooseLocation ? '#0D6EFD' : '#A0AEC0',
+    borderRadius: 12,
+    paddingVertical: 12,
+    alignItems: 'center',
+    opacity: canChooseLocation ? 1 : 0.6,
+  }}
+>
+  <Text style={{ color: '#FFF', fontWeight: '700' }}>
+    Escolher local de votação
+  </Text>
+</Pressable>
         </Card>
 
         {/* TOKEN */}
