@@ -1,0 +1,39 @@
+import 'dotenv/config';
+
+export default {
+    expo: {
+        name: "AnyVoteApp",
+        slug: "AnyVoteApp",
+        version: "1.0.0",
+        orientation: "portrait",
+        icon: "./assets/icon.png",
+        userInterfaceStyle: "light",
+        newArchEnabled: true,
+        splash: {
+            image: "./assets/splash-icon.png",
+            resizeMode: "contain",
+            backgroundColor: "#ffffff"
+        },
+        ios: {
+            supportsTablet: true,
+            bundleIdentifier: "com.anonymous.AnyVoteApp"
+        },
+        android: {
+            edgeToEdgeEnabled: true,
+            package: "com.anonymous.AnyVoteApp",
+            config: {
+                googleMaps: {
+                    apiKey: process.env.GOOGLE_MAPS_API_KEY
+                }
+            }
+        },
+        web: {
+            favicon: "./assets/favicon.png"
+        },
+        extra: {
+            eas: {
+                projectId: "bb850198-e898-4159-93a3-aa9fd7882891"
+            }
+        }
+    }
+};

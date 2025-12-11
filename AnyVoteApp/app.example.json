@@ -21,7 +21,7 @@
       "package": "com.anonymous.AnyVoteApp",
       "config": {
         "googleMaps": {
-          "apiKey": "AIzaSyDUJkoG3_mKogLRkxqIrFLQHGpWyhNgBbA"
+          "apiKey": ""
         }
       }
     },
