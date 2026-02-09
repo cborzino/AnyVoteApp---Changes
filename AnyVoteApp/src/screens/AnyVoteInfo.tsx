@@ -71,18 +71,18 @@ export default function AnyVoteInfo() {
 
   const canChooseLocation = phase === 'LOCATION_CHOICE'
   const alreadyRedirectedRef = useRef(false)
+  // as linhas comentadas abaixo ativam o aviso em caso de primeiro uso do app
+  // useEffect(() => {
+  //   // dispara o tutorial só se for FIRST_TIME
+  //   if (userStatus === 'FIRST_TIME' && !alreadyRedirectedRef.current) {
+  //     alreadyRedirectedRef.current = true
 
-  useEffect(() => {
-    // dispara o tutorial só se for FIRST_TIME
-    if (userStatus === 'FIRST_TIME' && !alreadyRedirectedRef.current) {
-      alreadyRedirectedRef.current = true
-
-      // entra na tela inicial do tutorial
-      // (usa o nome que você já tem registrado no stack root)A
-      navigation.replace('AnyVoteStart' as never)
-      // ou navigation.replace('AnyVoteStart' as never) se não quiser que volte pra info com "voltar"
-    }
-  }, [userStatus, navigation])
+  //     // entra na tela inicial do tutorial
+  //     // (usa o nome que você já tem registrado no stack root)A
+  //     navigation.replace('AnyVoteStart' as never)
+  //     // ou navigation.replace('AnyVoteStart' as never) se não quiser que volte pra info com "voltar"
+  //   }
+  // }, [userStatus, navigation])
 
 
   const cad = useMemo(() => ({
@@ -206,7 +206,7 @@ export default function AnyVoteInfo() {
                 textDecorationLine: 'underline',
               }}
             >
-              Rever aviso e informações gerais
+              Ver aviso e informações gerais
             </Text>
           </Pressable>
         </View>
